@@ -5,6 +5,8 @@
 #include <string.h>
 #include <stdarg.h>
 
+#define MAXLEN 100
+
 void PrintWords1(int, char, char*, ...);
 void PrintWords2(char,char*, ...);
 void PrintWords3(char, char*, ...);
@@ -16,7 +18,7 @@ int main()
 	puts("First:");
 	PrintWords1(3, 'p', "pkvppd kkkppp pp","1pp","2pppp");
 	puts("Second:");
-	PrintWords2('p', "sids", "pkvppd kkkppp pp", 1, 4., "ppp");
+	PrintWords2('p', "ss", "pkvppd kkkppp pp", "ppp");
 	puts("therd:");
 	PrintWords3('p', "sids", "pkvppd kkkppp pp", 1, 4., "ppp");
 }
@@ -29,45 +31,44 @@ void PrintWords1(int kilkel, char bukva, char* pershrech, ...)
 	}
 }
 
-void FindPrintPowtor(char* elem,char bukva)
+//strtok
+void FindPrintPowtor(const char* elem,char bukva)
 {
-	int count = 0;
-	char* endword = elem;
-	for (char* p = elem;*endword != '\0';p = endword + 1, count = 0)
+	char tempEl[MAXLEN] = { 0 };
+	strcpy(tempEl, elem);
+	
+	char* next = NULL;
+	char* rozd = " ,.-_/";
+	char* ptemp;
+	ptemp = strtok_s(tempEl, rozd,&next);
+	while (ptemp != NULL)
 	{
-		endword = FindRozdil(p, ' ');
-		char* chek = p;
-		while (chek != endword)
+		int count = 0;
+		for(char* point = ptemp; *point != '\0';point++)
 		{
-			if (*chek == bukva) count++;
-			if (count == 3)
+			if (*point == bukva)
 			{
-				while (p != endword)
-				{
-					printf("%c", *p);
-					p++;
-				}
-				printf("\n");
+				count++;
+			}
+			if(count > 2)
+			{
+				puts(ptemp);
 				break;
 			}
-			chek++;
 		}
+		ptemp = strtok_s(NULL, rozd,&next);
 	}
 }
 
 void PrintWords2(char bukva, char* types, ...)
 {
-	char** elem = &types;
+	void** elem = &types;
 	elem++;
 	while (*types != '\0')
 	{
 		if (*types == 's')
 		{
 			FindPrintPowtor(*elem, bukva);
-		}
-		if (*types == 'd')
-		{
-			elem++;
 		}
 		elem++;
 		types++;
